@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.mapper.roleMapper" >
+  <resultMap id="BaseResultMap" type="com.example.demo.bean.role" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="roleName" property="rolename" jdbcType="VARCHAR" />
+    <result column="roleRemark" property="roleremark" jdbcType="VARCHAR" />
+  </resultMap>
+
+
+
+  <resultMap id="RoleResultMap" type="com.example.demo.bean.role" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="roleName" property="rolename" jdbcType="VARCHAR" />
+    <result column="roleRemark" property="roleremark" jdbcType="VARCHAR" />
+    <association property="login" javaType="com.example.demo.bean.login">
+      <result property="id" column="id"/>
+      <result property="loginUserName" column="loginUserName"/>
+      <result property="loginPassword" column="loginPassword"/>
+      <result property="userId" column="userId"/>
+    </association>
+    <association property="user_role" javaType="com.example.demo.bean.user_role">
+      <result property="id" column="id"/>
+      <result property="userid" column="userid"/>
+      <result property="roleid" column="roleid"/>
+    </association>
+  </resultMap>
+
+
+  <sql id="Base_Column_List" >
+    id, roleName, roleRemark
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from role
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from role
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.example.demo.bean.role" >
+    insert into role (id, roleName, roleRemark
+      )
+    values (#{id,jdbcType=VARCHAR}, #{rolename,jdbcType=VARCHAR}, #{roleremark,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.demo.bean.role" >
+    insert into role
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="rolename != null" >
+        roleName,
+      </if>
+      <if test="roleremark != null" >
+        roleRemark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="rolename != null" >
+        #{rolename,jdbcType=VARCHAR},
+      </if>
+      <if test="roleremark != null" >
+        #{roleremark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.demo.bean.role" >
+    update role
+    <set >
+      <if test="rolename != null" >
+        roleName = #{rolename,jdbcType=VARCHAR},
+      </if>
+      <if test="roleremark != null" >
+        roleRemark = #{roleremark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.demo.bean.role" >
+    update role
+    set roleName = #{rolename,jdbcType=VARCHAR},
+      roleRemark = #{roleremark,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <select id="roles" resultType="com.example.demo.bean.role">
+    SELECT role.id,role.roleName, role.roleRemark from login,user_role,role
+    where login.userId = user_role.userid and user_role.roleId = role.id and login.loginUserName=#{username}
+  </select>
+
+
+</mapper>

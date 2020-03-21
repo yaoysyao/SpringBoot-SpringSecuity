@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.mapper.user_PageMapper" >
+  <resultMap id="BaseResultMap" type="com.example.demo.bean.user_Page" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="userRoleID" property="userroleid" jdbcType="VARCHAR" />
+    <result column="pageId" property="pageid" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, userRoleID, pageId
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from user_Page
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from user_Page
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.example.demo.bean.user_Page" >
+    insert into user_Page (id, userRoleID, pageId
+      )
+    values (#{id,jdbcType=VARCHAR}, #{userroleid,jdbcType=VARCHAR}, #{pageid,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.demo.bean.user_Page" >
+    insert into user_Page
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userroleid != null" >
+        userRoleID,
+      </if>
+      <if test="pageid != null" >
+        pageId,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="userroleid != null" >
+        #{userroleid,jdbcType=VARCHAR},
+      </if>
+      <if test="pageid != null" >
+        #{pageid,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.demo.bean.user_Page" >
+    update user_Page
+    <set >
+      <if test="userroleid != null" >
+        userRoleID = #{userroleid,jdbcType=VARCHAR},
+      </if>
+      <if test="pageid != null" >
+        pageId = #{pageid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.demo.bean.user_Page" >
+    update user_Page
+    set userRoleID = #{userroleid,jdbcType=VARCHAR},
+      pageId = #{pageid,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+
+  <select id="user_Page_List" resultType="com.example.demo.bean.user_Page">
+    SELECT user_Page.id,user_Page.pageId,user_Page.userRoleID,roleCode from login,user_role,user_Page where login.userId = user_role.userid
+    and user_role.roleId = user_Page.userRoleID and login.loginUserName=#{username}
+  </select>
+</mapper>
